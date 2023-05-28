@@ -1,0 +1,1 @@
+from neat_algo.flappy_neat import FlappyNeat
