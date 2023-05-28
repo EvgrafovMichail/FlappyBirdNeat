@@ -2,27 +2,25 @@ import os
 
 import pygame
 
-from game.game_objects import Bird, PipesPair, Floor
+from game.controllers import EnvController, ScoreController
+from game.game_objects import Bird
 from game.globals.constants import (
     GAME_FIELD_HEIGHT, GAME_FIELD_WIDTH
 )
-
-os.listdir('../data/sprites')
 
 BG_IMAGE_PATH = os.path.join('..', 'data', 'sprites', 'background.png')
 BACKGROUND_IMAGE = pygame.image.load(BG_IMAGE_PATH)
 
 
-def draw_window(window: pygame.Surface, bird: Bird, pipes, floor):
+def draw_window(
+        window: pygame.Surface,
+        bird: Bird,
+        env_controller: EnvController
+    ) -> None:
     
     window.blit(BACKGROUND_IMAGE, (0, 0))
     bird.draw(window)
-
-    for pipe in pipes:
-        pipe.draw(window)
-
-    floor.draw(window)
-    pygame.display.update()
+    env_controller.draw(window)
 
 
 def main():
@@ -31,9 +29,11 @@ def main():
         (GAME_FIELD_WIDTH, GAME_FIELD_HEIGHT)
     )
     clock = pygame.time.Clock()
+    
     bird = Bird()
-    floor = Floor()
-    pipes = [PipesPair()]
+    env_controller = EnvController()
+    score_controller = ScoreController()
+    score_global = 0
 
     while True:
 
@@ -47,21 +47,25 @@ def main():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 bird.flap()
 
-        pipe_to_delete = None
-        for pipe in pipes:
-            pipe.move()
-
-            if pipe.x + 52 < 0:
-                pipe_to_delete = pipe
-
-        if pipe_to_delete:
-            pipes.remove(pipe_to_delete)
-            pipes.append(PipesPair())
-
-        floor.move()
+        env_controller.move()
         bird.move()
 
-        draw_window(window, bird, pipes, floor)
+        score = env_controller.get_score(bird)
+
+        if score == -1000:
+            bird = Bird()
+            env_controller = EnvController()
+            score_controller = ScoreController()
+            score_global = 0
+
+            continue
+        
+        elif score == 1:
+            score_global += 1
+
+        draw_window(window, bird, env_controller)
+        score_controller.draw(window, score)
+        pygame.display.update()
 
 if __name__ == '__main__':
     main()
