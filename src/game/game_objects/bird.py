@@ -15,17 +15,16 @@ class Bird:
     __x: int = int(0.2 * GAME_FIELD_WIDTH)
     __y: float = int(0.25 * GAME_FIELD_HEIGHT)
     __rotation: float = 0.
-    __rotation_max: float = 30
+    __rotation_max: float = 25
     __rotation_min: float = -80
 
     __velocity: float = 0.
     __velocity_flap: float = -8
-    __rotation_velocity: float = 10.
+    __velocity_max: float = 10
+    __rotation_velocity: float = 3.
 
-    __acceleration: float = 3
-    __time_from_last_flap: float = 0.
-
-    __displacement_thresh: float = 15.
+    __acceleration: float = 1
+    __is_flapped: bool = False
 
     __images: List[pygame.Surface]
     __image_id: int = 0
@@ -52,15 +51,16 @@ class Bird:
 
     def move(self) -> None:
 
-        self.__time_from_last_flap += 1
+        if self.__velocity < self.__velocity_max and not self.__is_flapped:
+            self.__velocity += self.__acceleration
 
-        delta = self.__time_from_last_flap * self.__velocity
-        delta += 0.5 * self.__acceleration * self.__time_from_last_flap ** 2
-
-        delta = min(delta, self.__displacement_thresh)
+        if self.__is_flapped:
+            self.__is_flapped = False
 
         previous_position = self.__y
-        self.__y = max(self.__y + delta, 0)
+        self.__y += self.__velocity
+
+        self.__y = max(self.__y, 0)
 
         if self.__y < previous_position:
             self.__rotation = self.__rotation_max
@@ -72,8 +72,8 @@ class Bird:
             )
 
     def flap(self) -> None:
-        self.__time_from_last_flap = 0
         self.__velocity = self.__velocity_flap
+        self.__is_flapped = True
 
     def draw(self, window: pygame.Surface) -> None:
 
