@@ -3,6 +3,7 @@ from typing import Optional
 import pygame
 
 from game.game_objects.constants import PATH_TO_FLOOR_IMG
+from game.game_objects.schemas import Position
 from game.globals.constants import (
     GAME_FIELD_HEIGHT, GAME_FIELD_WIDTH
 )
@@ -47,5 +48,5 @@ class Floor:
         window.blit(self.__image, floor_seg2_pos)
 
     @property
-    def level(self) -> int:
-        return self.__y
+    def position(self) -> Position:
+        return Position(y_top_pos=self.__y)

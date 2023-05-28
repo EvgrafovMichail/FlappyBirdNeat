@@ -4,6 +4,7 @@ from itertools import cycle
 import pygame
 
 from game.game_objects.constants import PATHES_TO_BIRD_IMGS
+from game.game_objects.schemas import Position
 from game.globals.constants import (
     GAME_FIELD_HEIGHT, GAME_FIELD_WIDTH
 )
@@ -12,7 +13,7 @@ from game.globals.constants import (
 class Bird:
 
     __x: int = int(0.2 * GAME_FIELD_WIDTH)
-    __y: int = int(0.25 * GAME_FIELD_HEIGHT)
+    __y: float = int(0.25 * GAME_FIELD_HEIGHT)
     __rotation: float = 0.
     __rotation_max: float = 30
     __rotation_min: float = -80
@@ -103,3 +104,16 @@ class Bird:
         return pygame.mask.from_surface(
             self.__images[self.__image_id]
         )
+    
+    @property
+    def position(self) -> Position:
+
+        img_curr = self.__images[self.__image_id]
+        
+        position = Position(
+            x_left_pos=self.__x,
+            y_top_pos=self.__y,
+            y_bottom_pos=self.__y + img_curr.get_height()
+        )
+
+        return position

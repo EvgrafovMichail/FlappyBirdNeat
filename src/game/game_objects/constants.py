@@ -1,8 +1,5 @@
 import os
 
-from game.globals.constants import (
-    GAME_FIELD_HEIGHT, GAME_FIELD_WIDTH
-)
 
 ################################################################################
 #                                PATHES TO IMAGES                              #
@@ -21,11 +18,3 @@ PATH_TO_PIPE_IMG = os.path.join('..', 'data','sprites', 'pipe.png')
 
 # path to floor image
 PATH_TO_FLOOR_IMG = os.path.join('..', 'data', 'sprites', 'base.png')
-
-
-################################################################################
-#                                BIRD CONSTANTS                                #
-################################################################################
-
-BIRD_X_DEFAULT = int(0.2 * GAME_FIELD_WIDTH)
-BIRD_Y_DEFAULT = int(0.75 * GAME_FIELD_HEIGHT)
