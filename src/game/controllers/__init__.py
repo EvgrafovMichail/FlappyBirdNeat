@@ -1,0 +1,2 @@
+from game.controllers.score_controller import ScoreController
+from game.controllers.env_controller import EnvController
