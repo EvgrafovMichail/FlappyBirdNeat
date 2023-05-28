@@ -17,7 +17,7 @@ class PipesPair:
     __gap_size: int = 100
     __gaps: List[int] = [50 + i * 25 for i in range(2, 10)]
 
-    __velocity: int = 5
+    __velocity: int = 4
 
     __top_pipe_img: pygame.Surface
     __bottom_pipe_img: pygame.Surface
