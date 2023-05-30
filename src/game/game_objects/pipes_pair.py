@@ -4,8 +4,8 @@ from random import choice
 import pygame
 
 from game.game_objects.constants import PATH_TO_PIPE_IMG
-from game.game_objects.schemas import Position
 from game.globals.constants import GAME_FIELD_WIDTH
+from game.globals.schemas import Position
 
 
 class PipesPair:
@@ -26,7 +26,7 @@ class PipesPair:
 
         if x_pos:
             self.__x = x_pos
-        
+
         self.__bottom_pipe_img = pygame.image.load(PATH_TO_PIPE_IMG)
         self.__bottom_pipe_img = self.__bottom_pipe_img.convert_alpha()
         self.__top_pipe_img =  pygame.transform.flip(

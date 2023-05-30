@@ -3,7 +3,7 @@ from typing import Optional
 import pygame
 
 from game.game_objects.constants import PATH_TO_FLOOR_IMG
-from game.game_objects.schemas import Position
+from game.globals.schemas import Position
 from game.globals.constants import (
     GAME_FIELD_HEIGHT, GAME_FIELD_WIDTH
 )
