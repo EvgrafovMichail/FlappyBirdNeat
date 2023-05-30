@@ -4,7 +4,7 @@ from itertools import cycle
 import pygame
 
 from game.game_objects.constants import PATHES_TO_BIRD_IMGS
-from game.game_objects.schemas import Position
+from game.globals.schemas import Position
 from game.globals.constants import (
     GAME_FIELD_HEIGHT, GAME_FIELD_WIDTH
 )
@@ -104,12 +104,16 @@ class Bird:
         return pygame.mask.from_surface(
             self.__images[self.__image_id]
         )
-    
+
+    @property
+    def velocity(self) -> float:
+        return self.__velocity
+
     @property
     def position(self) -> Position:
 
         img_curr = self.__images[self.__image_id]
-        
+
         position = Position(
             x_left_pos=self.__x,
             y_top_pos=self.__y,
