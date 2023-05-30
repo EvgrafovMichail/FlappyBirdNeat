@@ -1,9 +1,8 @@
 from typing import Optional, Any
 
-import pygame
 import neat
-import os
 
+from game.globals.enumerations import Scores
 from game.controllers import EnvController
 from game.game_objects import Bird
 
@@ -13,16 +12,16 @@ class FlappyNeat:
     __config: Any
     __gen_num: int = 50
     __population: neat.Population
-    __score_thresh: int = 175
+    __score_thresh: float = 1e3
     __winner: Optional[neat.nn.FeedForwardNetwork] = None
 
     def __init__(
             self,
             path_to_config: str,
             gen_num: int = 50,
-            score_threshold: int = 175
+            score_threshold: float = 1e3
         ) -> None:
-        
+
         self.__config = neat.config.Config(
             neat.DefaultGenome, neat.DefaultReproduction,
             neat.DefaultSpeciesSet, neat.DefaultStagnation,
@@ -33,7 +32,7 @@ class FlappyNeat:
             message = f'invalid gen_num value: {gen_num}; '
             message += 'natural number was expected;'
             raise ValueError(message)
-        
+
         if score_threshold < 1:
             message = f'invalid score_threshold value: {gen_num}; '
             message += 'natural number was expected;'
@@ -88,10 +87,10 @@ class FlappyNeat:
                 bird.move()
 
                 output = networks[birds.index(bird)].activate((
-                    bird.position.y_top_pos,
-                    env_controller.neares_pipe_position.x_right_pos - bird.position.x_left_pos,
-                    env_controller.neares_pipe_position.y_top_pos - bird.position.y_top_pos,
-                    env_controller.neares_pipe_position.y_bottom_pos - bird.position.y_top_pos
+                    bird.velocity,
+                    env_controller.nearest_pipe_position.x_right_pos - bird.position.x_left_pos,
+                    env_controller.nearest_pipe_position.y_top_pos - bird.position.y_top_pos,
+                    env_controller.nearest_pipe_position.y_bottom_pos - bird.position.y_top_pos
                 ))[0]
 
                 if output > 0.5:
@@ -100,12 +99,12 @@ class FlappyNeat:
                 score = env_controller.get_score(bird)
                 genes[birds.index(bird)].fitness += score
 
-                if score == -1:
+                if score == Scores.DIED.value:
                     networks.pop(birds.index(bird))
                     genes.pop(birds.index(bird))
                     birds.pop(birds.index(bird))
 
-                elif score == 1:
+                elif score == Scores.PIPE_PASSED.value:
                     is_pipe_passed = True
 
             if is_pipe_passed:
