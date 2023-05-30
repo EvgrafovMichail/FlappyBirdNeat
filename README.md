@@ -2,7 +2,7 @@
 
 This repository contains FlappyBird game solution using NEAT-algorithm.
 
-[!bird_progress](./data/readme_images/bird_progress.png)
+![bird_progress](./data/readme_images/bird_progress.png)
 
 ___
 
