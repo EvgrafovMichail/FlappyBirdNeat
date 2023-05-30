@@ -4,7 +4,9 @@ import pygame
 
 from game.game_objects import PipesPair, Floor, Bird
 from game.globals.constants import GAME_FIELD_WIDTH
-from game.game_objects.schemas import Position
+from game.globals.enumerations import Scores
+from game.globals.schemas import Position
+
 
 class EnvController:
 
@@ -43,12 +45,12 @@ class EnvController:
     def get_score(self, bird: Bird) -> float:
 
         if self.__is_collided(bird):
-            return -1
+            return Scores.DIED.value
 
         if self.__is_pipe_passed(bird):
-            return 1
+            return Scores.PIPE_PASSED.value
 
-        return 0.01
+        return Scores.STILL_ALIVE.value
 
     def draw(self, window: pygame.Surface) -> None:
 
@@ -95,5 +97,5 @@ class EnvController:
         return nearest_pipe_id_prev != self.__nearest_pipe_id
     
     @property
-    def neares_pipe_position(self) -> Position:
+    def nearest_pipe_position(self) -> Position:
         return self.__pipes[self.__nearest_pipe_id].position
